@@ -1,0 +1,135 @@
+<script>
+	import MenuLink from '$lib/MenuLink.svelte';
+	import { page } from "$app/stores";
+	
+	let menuExpanded = false;
+	let screenSize;
+
+	function clickHandler() {
+		menuExpanded = !menuExpanded;
+		// console.log(menuExpanded);
+	}
+	const nav = [
+		{title: "Home", path: "/"},
+		{title: "Products", path: "/products"},
+		{title: "About", path: "/about"},
+		{title: "Contact", path: "/contact"},
+	]
+// console.log($page.route.id);
+</script>
+
+<svelte:window bind:innerWidth={screenSize} />
+<nav class="nav">
+	<a href="/">
+	<div class="logo">
+		<!-- <img alt="Scintillueur logo" src={logo} /> -->
+		<svg width="65" height="66" viewBox="0 0 65 66" class="logo-img" xmlns="http://www.w3.org/2000/svg">
+			<path d="M22.7069 34.3915C25.6722 34.4633 28.9484 34.3676 33.3127 32.9806C34.4247 32.6339 37.5215 31.6414 39.1237 29.4892C40.8335 27.1935 40.5107 25.8065 40.4868 24.6826C40.427 21.7412 39.6139 19.3498 38.5737 17.1856C38.1074 16.2291 37.5932 15.3203 36.9117 14.5431C36.7562 14.3638 35.9671 13.7779 36.0388 13.7301C36.3975 13.5388 37.091 12.6659 37.1986 12.7257C37.1986 12.7257 33.0974 18.5248 32.8822 18.9074C30.9691 22.2912 31.2441 24.2999 31.8539 25.8663C34.604 32.9089 41.9694 36.1372 43.7869 43.957C44.1695 45.607 44.4684 47.4006 43.9064 49.768C43.7151 50.5452 43.2966 51.9322 41.527 53.5225C37.103 57.4802 31.7942 56.0334 30.6343 55.7823C23.7113 54.2638 16.1426 50.9996 16.8242 43.0841C16.872 42.5341 18.7731 41.0276 18.9884 41.3863C20.0764 43.2276 19.933 46.0614 21.3439 47.6995C24.2016 51.0115 28.2669 53.4268 33.9344 54.2279C34.4964 54.3116 39.1237 54.7062 40.8096 53.2953C42.2444 52.0877 42.1129 50.0072 42.1368 49.6365C42.3162 46.5516 41.5868 44.1483 40.5346 42.0439C39.6737 40.3102 38.5617 38.7797 37.39 37.297C36.4693 36.1253 35.5127 34.9894 34.5681 33.8535C33.8627 33.0165 33.1692 32.1675 32.4757 31.3186C30.1202 28.4131 26.3538 25.8304 33.8746 15.9062C34.4725 15.1171 35.0225 14.1247 35.7877 13.2877C37.378 11.5539 38.1074 12.2713 38.3465 12.4627C39.4226 13.3355 39.9846 14.6508 40.5346 15.966C41.5151 18.2737 42.1966 20.8444 41.9814 24.0728C41.8977 25.2924 41.8977 26.8946 39.8531 29.3696C37.665 32.0121 34.5681 33.1361 33.0735 33.6024C28.6017 34.9654 25.5288 34.6904 22.7189 34.3915H22.7069ZM16.884 43.2157C16.5133 43.0244 18.1275 41.4819 18.809 41.3624C19.6699 41.2189 20.1601 41.9841 20.6265 42.2113C23.1135 43.395 25.7679 44.4114 28.8647 45.0331C31.8778 45.6429 35.2377 46.1212 40.4031 44.5668C43.5119 43.6342 48.4381 40.7287 50.7099 40.7287C53.3643 40.7287 53.9861 42.6896 54.6915 44.3755C55.0861 45.3081 55.397 46.3245 55.66 47.3647C55.7078 47.556 56.4013 48.3691 56.1024 48.7517C55.8035 49.1224 56.3296 48.3093 56.5807 47.9984C57.3579 46.994 57.9318 46.0973 58.4221 45.2483C59.821 42.845 60.6341 40.7884 61.1841 38.9351C62.858 33.2915 62.1048 29.3099 61.2917 25.5434C58.6971 13.6942 52.3241 3.92547 38.0954 2.04824C35.0345 1.64171 25.1701 0.876469 15.21 8.94734C10.7023 12.5942 7.82067 16.8269 6.27824 19.5292C1.99769 27.0141 2.20095 31.9045 2.58357 36.1133C3.62382 47.556 9.96095 54.766 19.1438 59.4292C23.6994 61.7488 28.5299 64.2358 36.2182 63.6499C36.7921 63.6021 35.4769 65.025 34.6997 65.288C31.7702 66.2446 30.1321 65.1326 28.4821 64.8337C24.3689 64.1043 20.8775 62.8129 17.6851 61.2586C6.88803 55.9975 -0.919785 47.4125 0.634605 32.0002C0.742216 30.9001 0.95744 29.7283 1.2444 28.5087C2.11725 24.7663 6.17062 14.2323 17.4459 6.46032C28.0038 -0.809446 36.1464 -0.211602 40.0205 0.242758C53.3045 1.82106 59.4982 10.5017 62.6906 20.7846C64.0298 25.125 65.2733 29.7283 63.707 36.2927C63.0972 38.8514 62.0091 41.9363 59.4264 45.7505C58.6612 46.8864 56.9992 49.2419 55.0502 50.3539C52.8382 51.6094 53.448 48.9908 53.3284 48.5604C52.7425 46.5277 52.1686 44.4233 50.5903 43.2157C48.7848 41.8287 44.0738 44.6983 39.6857 46.1331C36.828 47.0658 34.5801 47.3527 32.5474 47.4364C25.6005 47.6995 21.1645 45.4396 16.9079 43.2037L16.884 43.2157Z" fill="black"/>
+			</svg>
+		<logo />
+			<div class="logo-title">Scintillueur
+				<span class="subtitle">Hand poured goodness</span>
+			</div>
+		</div>
+	</a>
+	{#if screenSize < 480}
+		<!-- svelte-ignore a11y-click-events-have-key-events -->
+		<div class="menu" on:click={clickHandler}>&#9776;</div>
+	{/if}
+	<ul class="submenu" class:menuExpanded >
+		{#each nav as item}
+		<li class:active={$page.route.id === item.path}><MenuLink href={item.path} on:click={clickHandler}>{item.title}</MenuLink></li>
+		{/each}
+	</ul>
+</nav>
+
+<style>
+	.logo {
+		/* padding: 0 0.3rem; */
+		font-size: 1.9rem;
+		font-weight: 500;
+		display: flex;
+		flex-direction: row;
+		gap: 0.2rem;
+		align-items: center;
+		&:hover .logo-img{
+			fill: #d4af37;
+
+		}
+	}
+	.nav a {
+		text-decoration: none;
+		color: inherit;
+	}
+	.logo-img{
+		width: 80px;
+		height: 82px;
+		& path{
+			padding: 0.2rem;
+			fill: #800080;
+		}
+	}
+	.logo .logo-title{
+		display: block;
+		line-height: 0.9;
+		font-family: 'Grenze Gotisch', cursive;
+		color: #800080;
+		/* text-shadow: 1px 2px 2px rgba(0,0,0,0.4); */
+	}
+	.logo .subtitle{
+		font-family: 'Euphoria Script', cursive;
+		display: block;
+		font-size: 1.1rem;
+	}
+	.nav {
+		padding: 1rem;
+		display: flex;
+		align-items: center;
+		flex-direction: row;
+		position: relative;
+	}
+	.submenu {
+		display: flex;
+		width: 100%;
+		flex-wrap: wrap;
+		gap: 0.2rem;
+		flex-direction: row;
+		list-style-type: none;
+		justify-content: flex-end;
+	}
+	.menu {
+		/* display: none; */
+		font-size: 1.5rem;
+		width: 100%;
+		text-align: right;
+	}
+	
+	@media (max-width: 480px) {
+		.submenu {
+			display: none;
+		}
+
+		.submenu.menuExpanded {
+			display: flex;
+			width: 100%;
+			flex-wrap: wrap;
+			gap: 1rem;
+			flex-direction: column;
+			position: absolute;
+			top: 100%;
+			left: 0;
+			z-index: 9999;
+			list-style-type: none;
+			padding: 1.8rem;
+			background-color: white;
+			border-radius: 0.8rem;
+			box-shadow: 2px 2px 21px rgb(0, 0, 0, 25%);
+			justify-content: flex-start;
+		}
+	}
+	@media (max-width: 700px) {
+		.submenu {
+			flex-wrap: wrap;
+		}
+	}
+</style>
