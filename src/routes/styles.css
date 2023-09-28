@@ -18,6 +18,9 @@
     margin: 0;
     padding: 0;
 }
+html{
+    scrollbar-gutter: stable;
+}
 body {
     min-height: 100dvh;
     /* display: flex;
@@ -32,6 +35,7 @@ p{
 
 .footer {
     background-color:#d4af37;
+    background-color:#800080;
     color: #eaeaea;
     display: flex;
     /* flex: 1; */
