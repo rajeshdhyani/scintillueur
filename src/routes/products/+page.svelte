@@ -1,7 +1,5 @@
 <script>
 	import Card from '$lib/Card.svelte';
-
-
     const data = [
 		{title: "First Love", description: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Nobis, maxime! Suscipit veniam dolores ullam et?", price: "399"},
 		{title: "Jungle Myst 1234", description: "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Laudantium reprehenderit esse perspiciatis ratione error culpa reiciendis sed similique.", price: "399"},
