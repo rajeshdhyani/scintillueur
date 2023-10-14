@@ -54,7 +54,7 @@ var __privateSet = (obj, member, value, setter) => {
   return value;
 };
 
-// .svelte-kit/output/server/chunks/index.js
+// .svelte-kit/output/server/chunks/ssr.js
 function noop() {
 }
 function run(fn) {
@@ -67,10 +67,13 @@ function run_all(fns) {
   fns.forEach(run);
 }
 function safe_not_equal(a, b) {
-  return a != a ? b == b : a !== b || (a && typeof a === "object" || typeof a === "function");
+  return a != a ? b == b : a !== b || a && typeof a === "object" || typeof a === "function";
 }
 function subscribe(store, ...callbacks) {
   if (store == null) {
+    for (const callback of callbacks) {
+      callback(void 0);
+    }
     return noop;
   }
   const unsub = store.subscribe(...callbacks);
@@ -85,9 +88,7 @@ function compute_rest_props(props, keys) {
   return rest;
 }
 function custom_event(type, detail, { bubbles = false, cancelable = false } = {}) {
-  const e = document.createEvent("CustomEvent");
-  e.initCustomEvent(type, bubbles, cancelable, detail);
-  return e;
+  return new CustomEvent(type, { detail, bubbles, cancelable });
 }
 function set_current_component(component7) {
   current_component = component7;
@@ -102,7 +103,12 @@ function createEventDispatcher() {
   return (type, detail, { cancelable = false } = {}) => {
     const callbacks = component7.$$.callbacks[type];
     if (callbacks) {
-      const event = custom_event(type, detail, { cancelable });
+      const event = custom_event(
+        /** @type {string} */
+        type,
+        detail,
+        { cancelable }
+      );
       callbacks.slice().forEach((fn) => {
         fn.call(component7, event);
       });
@@ -117,6 +123,9 @@ function setContext(key2, context) {
 }
 function getContext(key2) {
   return get_current_component().$$.context.get(key2);
+}
+function ensure_array_like(array_like_or_iterator) {
+  return array_like_or_iterator?.length !== void 0 ? array_like_or_iterator : Array.from(array_like_or_iterator);
 }
 function spread(args, attrs_to_add) {
   const attributes = Object.assign({}, ...args);
@@ -134,7 +143,9 @@ function spread(args, attrs_to_add) {
       if (attributes.style == null) {
         attributes.style = style_object_to_string(styles_to_add);
       } else {
-        attributes.style = style_object_to_string(merge_ssr_styles(attributes.style, styles_to_add));
+        attributes.style = style_object_to_string(
+          merge_ssr_styles(attributes.style, styles_to_add)
+        );
       }
     }
   }
@@ -200,6 +211,7 @@ function escape_object(obj) {
   return result;
 }
 function each(items, fn) {
+  items = ensure_array_like(items);
   let str = "";
   for (let i = 0; i < items.length; i += 1) {
     str += fn(items[i], i);
@@ -210,7 +222,9 @@ function validate_component(component7, name) {
   if (!component7 || !component7.$$render) {
     if (name === "svelte:component")
       name += " this={...}";
-    throw new Error(`<${name}> is not a valid SSR component. You may need to review your build config to ensure that dependencies are compiled, rather than imported as pre-compiled modules. Otherwise you may need to fix a <${name}>.`);
+    throw new Error(
+      `<${name}> is not a valid SSR component. You may need to review your build config to ensure that dependencies are compiled, rather than imported as pre-compiled modules. Otherwise you may need to fix a <${name}>.`
+    );
   }
   return component7;
 }
@@ -257,9 +271,10 @@ function style_object_to_string(style_object) {
   return Object.keys(style_object).filter((key2) => style_object[key2]).map((key2) => `${key2}: ${escape_attribute_value(style_object[key2])};`).join(" ");
 }
 var current_component, _boolean_attributes, boolean_attributes, invalid_attribute_name_character, ATTR_REGEX, CONTENT_REGEX, missing_component, on_destroy;
-var init_chunks = __esm({
-  ".svelte-kit/output/server/chunks/index.js"() {
-    _boolean_attributes = [
+var init_ssr = __esm({
+  ".svelte-kit/output/server/chunks/ssr.js"() {
+    _boolean_attributes = /** @type {const} */
+    [
       "allowfullscreen",
       "allowpaymentrequest",
       "async",
@@ -610,7 +625,7 @@ var require_set_cookie = __commonJS({
 var getStores, page;
 var init_stores = __esm({
   ".svelte-kit/output/server/chunks/stores.js"() {
-    init_chunks();
+    init_ssr();
     getStores = () => {
       const stores = getContext("__svelte__");
       return {
@@ -643,7 +658,7 @@ __export(layout_svelte_exports, {
 var css$2, MenuLink, css$1, Menu, css, Layout;
 var init_layout_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/_layout.svelte.js"() {
-    init_chunks();
+    init_ssr();
     init_stores();
     css$2 = {
       code: ".btn-default.svelte-1uepi0h{padding:0.2rem 0.25rem;text-decoration:none;box-sizing:border-box;color:grey;transition:color 0.2s ease;font-weight:400;&:hover {\n			color: #d4af37;\n		}}",
@@ -653,8 +668,7 @@ var init_layout_svelte = __esm({
       let $$restProps = compute_rest_props($$props, []);
       createEventDispatcher();
       $$result.css.add(css$2);
-      return `<a${spread([{ href: "/" }, { class: "btn-default" }, escape_object($$restProps)], { classes: "svelte-1uepi0h" })}>${slots.default ? slots.default({}) : ``}
-</a>`;
+      return `<a${spread([{ href: "/" }, { class: "btn-default" }, escape_object($$restProps)], { classes: "svelte-1uepi0h" })}>${slots.default ? slots.default({}) : ``} </a>`;
     });
     css$1 = {
       code: ".logo.svelte-7s3glo.svelte-7s3glo{font-size:1.9rem;font-weight:500;display:flex;flex-direction:row;gap:0.2rem;align-items:center;&:hover .logo-img {\n			fill: #d4af37;\n		}}.nav.svelte-7s3glo a.svelte-7s3glo{text-decoration:none;color:inherit}.logo-img.svelte-7s3glo.svelte-7s3glo{width:80px;height:82px;& path {\n			padding: 0.2rem;\n			fill: #800080;\n			stroke: #800080;\n			stroke-width: 0.06rem;\n			/* stroke-dasharray: 2, 2; */\n			stroke-linejoin:miter;\n		}}.logo.svelte-7s3glo .logo-title.svelte-7s3glo{display:block;line-height:0.9;font-family:'Grenze Gotisch', cursive;font-weight:400;color:#800080;color:#d4af37}.logo.svelte-7s3glo .subtitle.svelte-7s3glo{font-family:'Euphoria Script', cursive;display:block;font-size:1.1rem;color:grey}.nav.svelte-7s3glo.svelte-7s3glo{padding:1rem;display:flex;align-items:center;flex-direction:row;position:relative}.submenu.svelte-7s3glo.svelte-7s3glo{display:flex;width:100%;flex-wrap:wrap;gap:0.2rem;flex-direction:row;list-style-type:none;justify-content:flex-end}.menu.svelte-7s3glo.svelte-7s3glo{font-size:1.5rem;width:100%;text-align:right}@media(max-width: 480px){.submenu.svelte-7s3glo.svelte-7s3glo{display:none}.submenu.menuExpanded.svelte-7s3glo.svelte-7s3glo{display:flex;width:100%;flex-wrap:wrap;gap:1rem;flex-direction:column;position:absolute;top:100%;left:0;z-index:9999;list-style-type:none;padding:1.8rem;background-color:white;border-radius:0.8rem;box-shadow:2px 2px 21px rgb(0, 0, 0, 25%);justify-content:flex-start}}@media(max-width: 700px){.submenu.svelte-7s3glo.svelte-7s3glo{flex-wrap:wrap}}",
@@ -671,22 +685,14 @@ var init_layout_svelte = __esm({
       ];
       $$result.css.add(css$1);
       $$unsubscribe_page();
-      return `
-<nav class="nav svelte-7s3glo"><a href="/" class="svelte-7s3glo"><div class="logo svelte-7s3glo">
-			<svg width="65" height="66" viewBox="0 0 65 66" class="logo-img svelte-7s3glo" xmlns="http://www.w3.org/2000/svg"><path d="M22.7069 34.3915C25.6722 34.4633 28.9484 34.3676 33.3127 32.9806C34.4247 32.6339 37.5215 31.6414 39.1237 29.4892C40.8335 27.1935 40.5107 25.8065 40.4868 24.6826C40.427 21.7412 39.6139 19.3498 38.5737 17.1856C38.1074 16.2291 37.5932 15.3203 36.9117 14.5431C36.7562 14.3638 35.9671 13.7779 36.0388 13.7301C36.3975 13.5388 37.091 12.6659 37.1986 12.7257C37.1986 12.7257 33.0974 18.5248 32.8822 18.9074C30.9691 22.2912 31.2441 24.2999 31.8539 25.8663C34.604 32.9089 41.9694 36.1372 43.7869 43.957C44.1695 45.607 44.4684 47.4006 43.9064 49.768C43.7151 50.5452 43.2966 51.9322 41.527 53.5225C37.103 57.4802 31.7942 56.0334 30.6343 55.7823C23.7113 54.2638 16.1426 50.9996 16.8242 43.0841C16.872 42.5341 18.7731 41.0276 18.9884 41.3863C20.0764 43.2276 19.933 46.0614 21.3439 47.6995C24.2016 51.0115 28.2669 53.4268 33.9344 54.2279C34.4964 54.3116 39.1237 54.7062 40.8096 53.2953C42.2444 52.0877 42.1129 50.0072 42.1368 49.6365C42.3162 46.5516 41.5868 44.1483 40.5346 42.0439C39.6737 40.3102 38.5617 38.7797 37.39 37.297C36.4693 36.1253 35.5127 34.9894 34.5681 33.8535C33.8627 33.0165 33.1692 32.1675 32.4757 31.3186C30.1202 28.4131 26.3538 25.8304 33.8746 15.9062C34.4725 15.1171 35.0225 14.1247 35.7877 13.2877C37.378 11.5539 38.1074 12.2713 38.3465 12.4627C39.4226 13.3355 39.9846 14.6508 40.5346 15.966C41.5151 18.2737 42.1966 20.8444 41.9814 24.0728C41.8977 25.2924 41.8977 26.8946 39.8531 29.3696C37.665 32.0121 34.5681 33.1361 33.0735 33.6024C28.6017 34.9654 25.5288 34.6904 22.7189 34.3915H22.7069ZM16.884 43.2157C16.5133 43.0244 18.1275 41.4819 18.809 41.3624C19.6699 41.2189 20.1601 41.9841 20.6265 42.2113C23.1135 43.395 25.7679 44.4114 28.8647 45.0331C31.8778 45.6429 35.2377 46.1212 40.4031 44.5668C43.5119 43.6342 48.4381 40.7287 50.7099 40.7287C53.3643 40.7287 53.9861 42.6896 54.6915 44.3755C55.0861 45.3081 55.397 46.3245 55.66 47.3647C55.7078 47.556 56.4013 48.3691 56.1024 48.7517C55.8035 49.1224 56.3296 48.3093 56.5807 47.9984C57.3579 46.994 57.9318 46.0973 58.4221 45.2483C59.821 42.845 60.6341 40.7884 61.1841 38.9351C62.858 33.2915 62.1048 29.3099 61.2917 25.5434C58.6971 13.6942 52.3241 3.92547 38.0954 2.04824C35.0345 1.64171 25.1701 0.876469 15.21 8.94734C10.7023 12.5942 7.82067 16.8269 6.27824 19.5292C1.99769 27.0141 2.20095 31.9045 2.58357 36.1133C3.62382 47.556 9.96095 54.766 19.1438 59.4292C23.6994 61.7488 28.5299 64.2358 36.2182 63.6499C36.7921 63.6021 35.4769 65.025 34.6997 65.288C31.7702 66.2446 30.1321 65.1326 28.4821 64.8337C24.3689 64.1043 20.8775 62.8129 17.6851 61.2586C6.88803 55.9975 -0.919785 47.4125 0.634605 32.0002C0.742216 30.9001 0.95744 29.7283 1.2444 28.5087C2.11725 24.7663 6.17062 14.2323 17.4459 6.46032C28.0038 -0.809446 36.1464 -0.211602 40.0205 0.242758C53.3045 1.82106 59.4982 10.5017 62.6906 20.7846C64.0298 25.125 65.2733 29.7283 63.707 36.2927C63.0972 38.8514 62.0091 41.9363 59.4264 45.7505C58.6612 46.8864 56.9992 49.2419 55.0502 50.3539C52.8382 51.6094 53.448 48.9908 53.3284 48.5604C52.7425 46.5277 52.1686 44.4233 50.5903 43.2157C48.7848 41.8287 44.0738 44.6983 39.6857 46.1331C36.828 47.0658 34.5801 47.3527 32.5474 47.4364C25.6005 47.6995 21.1645 45.4396 16.9079 43.2037L16.884 43.2157Z" fill="black"></path></svg>
-			<logo></logo>
-			<div class="logo-title svelte-7s3glo">Scintillueur
-				<span class="subtitle svelte-7s3glo">Hand poured goodness</span></div></div></a>
-	${``}
-	<ul class="${["submenu svelte-7s3glo", ""].join(" ").trim()}">${each(nav, (item) => {
+      return ` <nav class="nav svelte-7s3glo"><a href="/" class="svelte-7s3glo" data-svelte-h="svelte-8fxxzb"><div class="logo svelte-7s3glo"> <svg width="65" height="66" viewBox="0 0 65 66" class="logo-img svelte-7s3glo" xmlns="http://www.w3.org/2000/svg"><path d="M22.7069 34.3915C25.6722 34.4633 28.9484 34.3676 33.3127 32.9806C34.4247 32.6339 37.5215 31.6414 39.1237 29.4892C40.8335 27.1935 40.5107 25.8065 40.4868 24.6826C40.427 21.7412 39.6139 19.3498 38.5737 17.1856C38.1074 16.2291 37.5932 15.3203 36.9117 14.5431C36.7562 14.3638 35.9671 13.7779 36.0388 13.7301C36.3975 13.5388 37.091 12.6659 37.1986 12.7257C37.1986 12.7257 33.0974 18.5248 32.8822 18.9074C30.9691 22.2912 31.2441 24.2999 31.8539 25.8663C34.604 32.9089 41.9694 36.1372 43.7869 43.957C44.1695 45.607 44.4684 47.4006 43.9064 49.768C43.7151 50.5452 43.2966 51.9322 41.527 53.5225C37.103 57.4802 31.7942 56.0334 30.6343 55.7823C23.7113 54.2638 16.1426 50.9996 16.8242 43.0841C16.872 42.5341 18.7731 41.0276 18.9884 41.3863C20.0764 43.2276 19.933 46.0614 21.3439 47.6995C24.2016 51.0115 28.2669 53.4268 33.9344 54.2279C34.4964 54.3116 39.1237 54.7062 40.8096 53.2953C42.2444 52.0877 42.1129 50.0072 42.1368 49.6365C42.3162 46.5516 41.5868 44.1483 40.5346 42.0439C39.6737 40.3102 38.5617 38.7797 37.39 37.297C36.4693 36.1253 35.5127 34.9894 34.5681 33.8535C33.8627 33.0165 33.1692 32.1675 32.4757 31.3186C30.1202 28.4131 26.3538 25.8304 33.8746 15.9062C34.4725 15.1171 35.0225 14.1247 35.7877 13.2877C37.378 11.5539 38.1074 12.2713 38.3465 12.4627C39.4226 13.3355 39.9846 14.6508 40.5346 15.966C41.5151 18.2737 42.1966 20.8444 41.9814 24.0728C41.8977 25.2924 41.8977 26.8946 39.8531 29.3696C37.665 32.0121 34.5681 33.1361 33.0735 33.6024C28.6017 34.9654 25.5288 34.6904 22.7189 34.3915H22.7069ZM16.884 43.2157C16.5133 43.0244 18.1275 41.4819 18.809 41.3624C19.6699 41.2189 20.1601 41.9841 20.6265 42.2113C23.1135 43.395 25.7679 44.4114 28.8647 45.0331C31.8778 45.6429 35.2377 46.1212 40.4031 44.5668C43.5119 43.6342 48.4381 40.7287 50.7099 40.7287C53.3643 40.7287 53.9861 42.6896 54.6915 44.3755C55.0861 45.3081 55.397 46.3245 55.66 47.3647C55.7078 47.556 56.4013 48.3691 56.1024 48.7517C55.8035 49.1224 56.3296 48.3093 56.5807 47.9984C57.3579 46.994 57.9318 46.0973 58.4221 45.2483C59.821 42.845 60.6341 40.7884 61.1841 38.9351C62.858 33.2915 62.1048 29.3099 61.2917 25.5434C58.6971 13.6942 52.3241 3.92547 38.0954 2.04824C35.0345 1.64171 25.1701 0.876469 15.21 8.94734C10.7023 12.5942 7.82067 16.8269 6.27824 19.5292C1.99769 27.0141 2.20095 31.9045 2.58357 36.1133C3.62382 47.556 9.96095 54.766 19.1438 59.4292C23.6994 61.7488 28.5299 64.2358 36.2182 63.6499C36.7921 63.6021 35.4769 65.025 34.6997 65.288C31.7702 66.2446 30.1321 65.1326 28.4821 64.8337C24.3689 64.1043 20.8775 62.8129 17.6851 61.2586C6.88803 55.9975 -0.919785 47.4125 0.634605 32.0002C0.742216 30.9001 0.95744 29.7283 1.2444 28.5087C2.11725 24.7663 6.17062 14.2323 17.4459 6.46032C28.0038 -0.809446 36.1464 -0.211602 40.0205 0.242758C53.3045 1.82106 59.4982 10.5017 62.6906 20.7846C64.0298 25.125 65.2733 29.7283 63.707 36.2927C63.0972 38.8514 62.0091 41.9363 59.4264 45.7505C58.6612 46.8864 56.9992 49.2419 55.0502 50.3539C52.8382 51.6094 53.448 48.9908 53.3284 48.5604C52.7425 46.5277 52.1686 44.4233 50.5903 43.2157C48.7848 41.8287 44.0738 44.6983 39.6857 46.1331C36.828 47.0658 34.5801 47.3527 32.5474 47.4364C25.6005 47.6995 21.1645 45.4396 16.9079 43.2037L16.884 43.2157Z" fill="black"></path></svg> <logo></logo> <div class="logo-title svelte-7s3glo">Scintillueur
+				<span class="subtitle svelte-7s3glo">Hand poured goodness</span></div></div></a> ${``} <ul class="${["submenu svelte-7s3glo", ""].join(" ").trim()}">${each(nav, (item) => {
         return `<li${add_classes(($page.route.id === item.path ? "active" : "").trim())}>${validate_component(MenuLink, "MenuLink").$$render($$result, { href: item.path }, {}, {
           default: () => {
             return `${escape(item.title)}`;
           }
-        })}
-			</li>`;
-      })}</ul>
-</nav>`;
+        })} </li>`;
+      })}</ul> </nav>`;
     });
     css = {
       code: "main.svelte-7ngm79{display:inline-block;max-width:80vw}",
@@ -694,10 +700,7 @@ var init_layout_svelte = __esm({
     };
     Layout = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       $$result.css.add(css);
-      return `<div class="wrapper">${validate_component(Menu, "Menu").$$render($$result, {}, {}, {})}
-	<main class="svelte-7ngm79">${slots.default ? slots.default({}) : ``}</main>
-	<footer class="footer"><p>\xA9 2023. Scintillueur. All rights reserved</p></footer>
-</div>`;
+      return `<div class="wrapper">${validate_component(Menu, "Menu").$$render($$result, {}, {}, {})} <main class="svelte-7ngm79">${slots.default ? slots.default({}) : ``}</main> <footer class="footer" data-svelte-h="svelte-i63wjo"><p>\xA9 2023. Scintillueur. All rights reserved</p></footer> </div>`;
     });
   }
 });
@@ -716,7 +719,7 @@ var init__ = __esm({
   ".svelte-kit/output/server/nodes/0.js"() {
     index = 0;
     component = async () => component_cache ?? (component_cache = (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default);
-    imports = ["_app/immutable/nodes/0.608a6e98.js", "_app/immutable/chunks/index.023f354a.js", "_app/immutable/chunks/stores.e28f3dd0.js", "_app/immutable/chunks/singletons.5189a849.js"];
+    imports = ["_app/immutable/nodes/0.508bbdba.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js", "_app/immutable/chunks/each.e59479a4.js", "_app/immutable/chunks/stores.98628531.js", "_app/immutable/chunks/singletons.51610d62.js"];
     stylesheets = ["_app/immutable/assets/0.2bb29258.css"];
     fonts = [];
   }
@@ -730,14 +733,13 @@ __export(error_svelte_exports, {
 var Error2;
 var init_error_svelte = __esm({
   ".svelte-kit/output/server/entries/fallbacks/error.svelte.js"() {
-    init_chunks();
+    init_ssr();
     init_stores();
     Error2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
       let $page, $$unsubscribe_page;
       $$unsubscribe_page = subscribe(page, (value) => $page = value);
       $$unsubscribe_page();
-      return `<h1>${escape($page.status)}</h1>
-<p>${escape($page.error?.message)}</p>`;
+      return `<h1>${escape($page.status)}</h1> <p>${escape($page.error?.message)}</p>`;
     });
   }
 });
@@ -756,7 +758,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ?? (component_cache2 = (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default);
-    imports2 = ["_app/immutable/nodes/1.af48bf8d.js", "_app/immutable/chunks/index.023f354a.js", "_app/immutable/chunks/stores.e28f3dd0.js", "_app/immutable/chunks/singletons.5189a849.js"];
+    imports2 = ["_app/immutable/nodes/1.83cc5f39.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js", "_app/immutable/chunks/stores.98628531.js", "_app/immutable/chunks/singletons.51610d62.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -770,15 +772,9 @@ __export(page_svelte_exports, {
 var Page;
 var init_page_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/_page.svelte.js"() {
-    init_chunks();
+    init_ssr();
     Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      return `${$$result.head += `<!-- HEAD_svelte-a7xpzd_START -->${$$result.title = `<title>Scintillueur | Home</title>`, ""}<!-- HEAD_svelte-a7xpzd_END -->`, ""}
-
-<h1 class="page-title">Welcome!</h1>
-<p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quas deserunt explicabo vitae mollitia, incidunt ullam aut perspiciatis! Accusamus magnam quo in, maiores architecto aliquam aperiam dolores molestiae quia, enim tenetur.</p>
-<p>Optio consequuntur ut suscipit necessitatibus corrupti qui modi quisquam aliquid odio cupiditate, dolorum quod ullam? Voluptatem, culpa eaque. Doloremque optio corrupti earum cum ea architecto consectetur adipisci a ipsam libero!</p>
-<p>Dolore expedita doloremque quae laboriosam eum dolorem repellat impedit autem sed. Optio enim ab nam, laborum nulla voluptates perferendis provident. Tenetur molestias laudantium quis dolor, provident distinctio doloremque iusto sit!</p>
-<p>Architecto molestiae rem veritatis laborum animi eaque vel magni quis odit voluptatem, corporis quo, alias minus at delectus incidunt officia dolorum harum cumque error soluta repudiandae? Quae, voluptas dolor! Magnam?</p>`;
+      return `${$$result.head += `<!-- HEAD_svelte-xj33sn_START -->${$$result.title = `<title>Scintillueur | Home</title>`, ""}<!-- HEAD_svelte-xj33sn_END -->`, ""} <h1 class="page-title" data-svelte-h="svelte-mayaj8">Welcome!</h1> <div data-svelte-h="svelte-1vke7xm"><spline-viewer hint loading-anim url="https://prod.spline.design/j9-OWKTFExWMnwkA/scene.splinecode"></spline-viewer></div> <p data-svelte-h="svelte-1xcwbrw">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quas deserunt explicabo vitae mollitia, incidunt ullam aut perspiciatis! Accusamus magnam quo in, maiores architecto aliquam aperiam dolores molestiae quia, enim tenetur.</p> <p data-svelte-h="svelte-1e523rx">Optio consequuntur ut suscipit necessitatibus corrupti qui modi quisquam aliquid odio cupiditate, dolorum quod ullam? Voluptatem, culpa eaque. Doloremque optio corrupti earum cum ea architecto consectetur adipisci a ipsam libero!</p> <p data-svelte-h="svelte-xborbg">Dolore expedita doloremque quae laboriosam eum dolorem repellat impedit autem sed. Optio enim ab nam, laborum nulla voluptates perferendis provident. Tenetur molestias laudantium quis dolor, provident distinctio doloremque iusto sit!</p> <p data-svelte-h="svelte-1ukqr91">Architecto molestiae rem veritatis laborum animi eaque vel magni quis odit voluptatem, corporis quo, alias minus at delectus incidunt officia dolorum harum cumque error soluta repudiandae? Quae, voluptas dolor! Magnam?</p>`;
     });
   }
 });
@@ -797,7 +793,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ?? (component_cache3 = (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default);
-    imports3 = ["_app/immutable/nodes/2.4c5ce1c4.js", "_app/immutable/chunks/index.023f354a.js"];
+    imports3 = ["_app/immutable/nodes/2.5c4106f6.js", "_app/immutable/chunks/preload-helper.a4192956.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -811,16 +807,9 @@ __export(page_svelte_exports2, {
 var Page2;
 var init_page_svelte2 = __esm({
   ".svelte-kit/output/server/entries/pages/about/_page.svelte.js"() {
-    init_chunks();
+    init_ssr();
     Page2 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      return `${$$result.head += `<!-- HEAD_svelte-1uf2yfp_START -->${$$result.title = `<title>Scintillueur | About</title>`, ""}<!-- HEAD_svelte-1uf2yfp_END -->`, ""}
-
-<h1 class="page-title">About Scintillueuer</h1>
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus qui aliquid, recusandae accusantium non optio! Facilis suscipit iure dignissimos, fugit impedit rem itaque eius voluptatibus?</p>
-<p>Aut commodi reiciendis voluptate, adipisci inventore ad saepe deleniti modi mollitia explicabo. Suscipit ab aspernatur ex et itaque. Voluptates modi eum cumque quas quae consequuntur?</p>
-<p>Obcaecati possimus magnam magni optio? Molestiae rerum, nam aliquam quisquam officiis natus alias culpa iusto delectus eveniet, dolores, facilis nisi necessitatibus corrupti quis optio ex?</p>
-<p>Aliquid, adipisci. Reprehenderit dignissimos eveniet eum neque fuga id laudantium quo? Modi iste quasi reiciendis magnam et, natus quam recusandae labore facilis eos qui ipsa!</p>
-<p>Nihil inventore quisquam porro id necessitatibus neque libero! Facere distinctio, culpa dolorem atque dolorum vero, unde esse, quam delectus adipisci dolores magni saepe ipsam eaque.</p>`;
+      return `${$$result.head += `<!-- HEAD_svelte-1wzzqnf_START -->${$$result.title = `<title>Scintillueur | About</title>`, ""}<!-- HEAD_svelte-1wzzqnf_END -->`, ""} <h1 class="page-title" data-svelte-h="svelte-5guikm">About Scintillueuer</h1> <p data-svelte-h="svelte-o39tz9">Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus qui aliquid, recusandae accusantium non optio! Facilis suscipit iure dignissimos, fugit impedit rem itaque eius voluptatibus?</p> <p data-svelte-h="svelte-10k9dky">Aut commodi reiciendis voluptate, adipisci inventore ad saepe deleniti modi mollitia explicabo. Suscipit ab aspernatur ex et itaque. Voluptates modi eum cumque quas quae consequuntur?</p> <p data-svelte-h="svelte-1fhz4kx">Obcaecati possimus magnam magni optio? Molestiae rerum, nam aliquam quisquam officiis natus alias culpa iusto delectus eveniet, dolores, facilis nisi necessitatibus corrupti quis optio ex?</p> <p data-svelte-h="svelte-1aa5kcs">Aliquid, adipisci. Reprehenderit dignissimos eveniet eum neque fuga id laudantium quo? Modi iste quasi reiciendis magnam et, natus quam recusandae labore facilis eos qui ipsa!</p> <p data-svelte-h="svelte-7mp66">Nihil inventore quisquam porro id necessitatibus neque libero! Facere distinctio, culpa dolorem atque dolorum vero, unde esse, quam delectus adipisci dolores magni saepe ipsam eaque.</p>`;
     });
   }
 });
@@ -839,7 +828,7 @@ var init__4 = __esm({
   ".svelte-kit/output/server/nodes/3.js"() {
     index4 = 3;
     component4 = async () => component_cache4 ?? (component_cache4 = (await Promise.resolve().then(() => (init_page_svelte2(), page_svelte_exports2))).default);
-    imports4 = ["_app/immutable/nodes/3.cd6240d0.js", "_app/immutable/chunks/index.023f354a.js"];
+    imports4 = ["_app/immutable/nodes/3.77ce922d.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js"];
     stylesheets4 = [];
     fonts4 = [];
   }
@@ -853,15 +842,9 @@ __export(page_svelte_exports3, {
 var Page3;
 var init_page_svelte3 = __esm({
   ".svelte-kit/output/server/entries/pages/contact/_page.svelte.js"() {
-    init_chunks();
+    init_ssr();
     Page3 = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      return `${$$result.head += `<!-- HEAD_svelte-1rzbur6_START -->${$$result.title = `<title>Scintillueur | Contact us</title>`, ""}<!-- HEAD_svelte-1rzbur6_END -->`, ""}
-
-<h1 class="page-title">Contact us</h1>
-
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit fugiat tempora distinctio aliquid consectetur doloremque modi quae cumque quis qui, repudiandae ipsam asperiores dolor dolores.</p>
-<p>Temporibus reprehenderit expedita, incidunt, assumenda error in odio voluptatem accusamus deleniti vero neque quasi laudantium praesentium porro eos? Quos officiis tenetur quisquam! Enim, id tempora.</p>
-<p>Dicta tempora ullam, repellendus officiis laborum, corporis est iste quas repudiandae quam id facilis! Reprehenderit fugit id blanditiis distinctio, tempora doloribus eum fugiat nulla doloremque!</p>`;
+      return `${$$result.head += `<!-- HEAD_svelte-1rzbur6_START -->${$$result.title = `<title>Scintillueur | Contact us</title>`, ""}<!-- HEAD_svelte-1rzbur6_END -->`, ""} <h1 class="page-title" data-svelte-h="svelte-1mqy8z1">Contact us</h1> <p data-svelte-h="svelte-pndrit">Lorem ipsum dolor sit amet consectetur adipisicing elit. Odit fugiat tempora distinctio aliquid consectetur doloremque modi quae cumque quis qui, repudiandae ipsam asperiores dolor dolores.</p> <p data-svelte-h="svelte-1qfnomg">Temporibus reprehenderit expedita, incidunt, assumenda error in odio voluptatem accusamus deleniti vero neque quasi laudantium praesentium porro eos? Quos officiis tenetur quisquam! Enim, id tempora.</p> <p data-svelte-h="svelte-euqzge">Dicta tempora ullam, repellendus officiis laborum, corporis est iste quas repudiandae quam id facilis! Reprehenderit fugit id blanditiis distinctio, tempora doloribus eum fugiat nulla doloremque!</p>`;
     });
   }
 });
@@ -880,7 +863,7 @@ var init__5 = __esm({
   ".svelte-kit/output/server/nodes/4.js"() {
     index5 = 4;
     component5 = async () => component_cache5 ?? (component_cache5 = (await Promise.resolve().then(() => (init_page_svelte3(), page_svelte_exports3))).default);
-    imports5 = ["_app/immutable/nodes/4.b68a04b1.js", "_app/immutable/chunks/index.023f354a.js"];
+    imports5 = ["_app/immutable/nodes/4.67c377d3.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js"];
     stylesheets5 = [];
     fonts5 = [];
   }
@@ -894,7 +877,7 @@ __export(page_svelte_exports4, {
 var css$12, Card, css2, Page4;
 var init_page_svelte4 = __esm({
   ".svelte-kit/output/server/entries/pages/products/_page.svelte.js"() {
-    init_chunks();
+    init_ssr();
     css$12 = {
       code: ".card.svelte-1687i6q.svelte-1687i6q{background:#fff;border-radius:5px;box-shadow:0 1px 2px rgba(0, 0, 0.1);margin:20px 0;max-width:320px;padding:0.6rem;display:grid;align-items:stretch;transition:all 0.3s;&:hover {\n			box-shadow: 0 1px 4px rgba(0, 0, 0.4);\n			cursor: pointer;\n			background-color: whitesmoke;\n		}}.product-image.svelte-1687i6q.svelte-1687i6q{width:300px;align-self:center}.product-image.svelte-1687i6q img.svelte-1687i6q{width:300px;height:300px;object-fit:cover;border-radius:5px}.card-header.svelte-1687i6q.svelte-1687i6q{font-size:1rem;font-weight:600;padding:0.2rem 0}.card-body.svelte-1687i6q.svelte-1687i6q{font-size:0.9rem;margin:0.3rem 0}.description.svelte-1687i6q.svelte-1687i6q{overflow:hidden;text-overflow:ellipsis;-webkit-box-orient:vertical;-webkit-line-clamp:3;display:-webkit-box}.card-footer.svelte-1687i6q.svelte-1687i6q{font-size:0.8rem;font-weight:700;text-align:center;border-top:1px dotted #696969;padding:0.3rem 0 0;margin-top:0.3rem;letter-spacing:-1px}",
       map: null
@@ -910,11 +893,7 @@ var init_page_svelte4 = __esm({
       if ($$props.price === void 0 && $$bindings.price && price !== void 0)
         $$bindings.price(price);
       $$result.css.add(css$12);
-      return `<div class="card svelte-1687i6q"><div class="product-image svelte-1687i6q"><img src="/images/20230626_174239.jpg" alt="Scintillueur Wax Candle" class="svelte-1687i6q"></div>
-	<h3 class="card-header svelte-1687i6q">${escape(title)}</h3>
-	<div class="card-body svelte-1687i6q"><div class="description svelte-1687i6q">${escape(description)}</div></div>
-	<div class="card-footer svelte-1687i6q">\u20B9 ${escape(price)}</div>
-</div>`;
+      return `<div class="card svelte-1687i6q"><div class="product-image svelte-1687i6q" data-svelte-h="svelte-1m42anv"><img src="/images/20230626_174239.jpg" alt="Scintillueur Wax Candle" class="svelte-1687i6q"></div> <h3 class="card-header svelte-1687i6q">${escape(title)}</h3> <div class="card-body svelte-1687i6q"><div class="description svelte-1687i6q">${escape(description)}</div></div> <div class="card-footer svelte-1687i6q">\u20B9 ${escape(price)}</div> </div>`;
     });
     css2 = {
       code: ".row.svelte-efe9dw{display:grid;grid-template-columns:repeat(auto-fill, minmax(320px, 1fr));gap:0.3rem}",
@@ -964,10 +943,7 @@ var init_page_svelte4 = __esm({
         }
       ];
       $$result.css.add(css2);
-      return `${$$result.head += `<!-- HEAD_svelte-11ddcer_START -->${$$result.title = `<title>Scintillueur | Products</title>`, ""}<!-- HEAD_svelte-11ddcer_END -->`, ""}
-
-<h1 class="page-title">100% soy wax candles, hand made with love!</h1>
-<div class="row row-cards svelte-efe9dw">${each(data, (item) => {
+      return `${$$result.head += `<!-- HEAD_svelte-11ddcer_START -->${$$result.title = `<title>Scintillueur | Products</title>`, ""}<!-- HEAD_svelte-11ddcer_END -->`, ""} <h1 class="page-title" data-svelte-h="svelte-do1xmp">100% soy wax candles, hand made with love!</h1> <div class="row row-cards svelte-efe9dw">${each(data, (item) => {
         return `${validate_component(Card, "Card").$$render(
           $$result,
           {
@@ -978,8 +954,7 @@ var init_page_svelte4 = __esm({
           {},
           {}
         )}`;
-      })}
-</div>`;
+      })} </div>`;
     });
   }
 });
@@ -998,14 +973,14 @@ var init__6 = __esm({
   ".svelte-kit/output/server/nodes/5.js"() {
     index6 = 5;
     component6 = async () => component_cache6 ?? (component_cache6 = (await Promise.resolve().then(() => (init_page_svelte4(), page_svelte_exports4))).default);
-    imports6 = ["_app/immutable/nodes/5.eaf1b923.js", "_app/immutable/chunks/index.023f354a.js"];
+    imports6 = ["_app/immutable/nodes/5.4356bf7f.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js", "_app/immutable/chunks/each.e59479a4.js"];
     stylesheets6 = ["_app/immutable/assets/5.7268e8a8.css"];
     fonts6 = [];
   }
 });
 
 // .svelte-kit/output/server/chunks/internal.js
-init_chunks();
+init_ssr();
 var base = "";
 var assets = base;
 var initial = { base, assets };
@@ -1049,15 +1024,14 @@ var Root = create_ssr_component(($$result, $$props, $$bindings, slots) => {
     $$bindings.data_1(data_1);
   let $$settled;
   let $$rendered;
+  let previous_head = $$result.head;
   do {
     $$settled = true;
+    $$result.head = previous_head;
     {
       stores.page.set(page2);
     }
-    $$rendered = `
-
-
-${constructors[1] ? `${validate_component(constructors[0] || missing_component, "svelte:component").$$render(
+    $$rendered = `  ${constructors[1] ? `${validate_component(constructors[0] || missing_component, "svelte:component").$$render(
       $$result,
       { data: data_0, this: components[0] },
       {
@@ -1091,9 +1065,7 @@ ${constructors[1] ? `${validate_component(constructors[0] || missing_component, 
         }
       },
       {}
-    )}`}
-
-${``}`;
+    )}`} ${``}`;
   } while (!$$settled);
   return $$rendered;
 });
@@ -1111,7 +1083,7 @@ var options = {
   root: Root,
   service_worker: false,
   templates: {
-    app: ({ head, body, assets: assets2, nonce, env }) => '<!DOCTYPE html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<link rel="icon" href="' + assets2 + '/favicon.png" />\n		<meta name="viewport" content="width=device-width" />\n		' + head + '\n	</head>\n	<body data-sveltekit-preload-data="hover">\n		<div style="display: contents">' + body + "</div>\n	</body>\n</html>\n",
+    app: ({ head, body, assets: assets2, nonce, env }) => '<!DOCTYPE html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<link rel="icon" href="' + assets2 + '/favicon.png" />\n		<meta name="viewport" content="width=device-width" />\n		<!-- <script type="module" src="https://unpkg.com/@splinetool/viewer@0.9.480/build/spline-viewer.js"><\/script> -->\n		' + head + '\n	</head>\n	<body data-sveltekit-preload-data="hover">\n		<div style="display: contents">' + body + "</div>\n	</body>\n</html>\n",
     error: ({ status, message }) => '<!DOCTYPE html>\n<html lang="en">\n	<head>\n		<meta charset="utf-8" />\n		<title>' + message + `</title>
 
 		<style>
@@ -1173,7 +1145,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "1yz0cuq"
+  version_hash: "13t2qje"
 };
 function get_hooks() {
   return {};
@@ -1635,7 +1607,7 @@ function stringify_primitive2(thing) {
 }
 
 // .svelte-kit/output/server/index.js
-init_chunks();
+init_ssr();
 var import_cookie = __toESM(require_cookie(), 1);
 var set_cookie_parser = __toESM(require_set_cookie(), 1);
 var DEV = false;
@@ -1739,6 +1711,7 @@ var ActionFailure = class {
 function exec(match, params, matchers) {
   const result = {};
   const values = match.slice(1);
+  const values_needing_match = values.filter((value) => value !== void 0);
   let buffered = 0;
   for (let i = 0; i < params.length; i += 1) {
     const param = params[i];
@@ -1757,6 +1730,9 @@ function exec(match, params, matchers) {
       const next_param = params[i + 1];
       const next_value = values[i + 1];
       if (next_param && !next_param.rest && next_param.optional && next_value && param.chained) {
+        buffered = 0;
+      }
+      if (!next_param && !next_value && Object.keys(result).length === values_needing_match.length) {
         buffered = 0;
       }
       continue;
@@ -1905,8 +1881,8 @@ async function render_endpoint(event, mod, state) {
     /** @type {import('types').HttpMethod} */
     event.request.method
   );
-  let handler2 = mod[method];
-  if (!handler2 && method === "HEAD") {
+  let handler2 = mod[method] || mod.fallback;
+  if (method === "HEAD" && mod.GET && !mod.HEAD) {
     handler2 = mod.GET;
   }
   if (!handler2) {
@@ -2498,7 +2474,7 @@ function writable(value, start = noop) {
     const subscriber = [run2, invalidate];
     subscribers.add(subscriber);
     if (subscribers.size === 1) {
-      stop = start(set) || noop;
+      stop = start(set, update) || noop;
     }
     run2(value);
     return () => {
@@ -3339,6 +3315,14 @@ async function respond_with_error({
   error: error2,
   resolve_opts
 }) {
+  if (event.request.headers.get("x-sveltekit-error")) {
+    return static_error_page(
+      options2,
+      status,
+      /** @type {Error} */
+      error2.message
+    );
+  }
   const fetched = [];
   try {
     const branch = [];
@@ -4131,6 +4115,7 @@ var valid_server_exports = /* @__PURE__ */ new Set([
   "DELETE",
   "OPTIONS",
   "HEAD",
+  "fallback",
   "prerender",
   "trailingSlash",
   "config",
@@ -4449,6 +4434,13 @@ async function respond(request, options2, manifest2, state) {
         }
         return response;
       }
+      if (state.error && event2.isSubRequest) {
+        return await fetch(request, {
+          headers: {
+            "x-sveltekit-error": "true"
+          }
+        });
+      }
       if (state.error) {
         return text("Internal Server Error", {
           status: 500
@@ -4571,7 +4563,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set([".DS_Store", "favicon.png", "images/20230626_174239.jpg"]),
     mimeTypes: { ".png": "image/png", ".jpg": "image/jpeg" },
     _: {
-      client: { "start": "_app/immutable/entry/start.8d88902a.js", "app": "_app/immutable/entry/app.edb8355b.js", "imports": ["_app/immutable/entry/start.8d88902a.js", "_app/immutable/chunks/index.023f354a.js", "_app/immutable/chunks/singletons.5189a849.js", "_app/immutable/entry/app.edb8355b.js", "_app/immutable/chunks/index.023f354a.js"], "stylesheets": [], "fonts": [] },
+      client: { "start": "_app/immutable/entry/start.447cec14.js", "app": "_app/immutable/entry/app.6985a6e1.js", "imports": ["_app/immutable/entry/start.447cec14.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/singletons.51610d62.js", "_app/immutable/entry/app.6985a6e1.js", "_app/immutable/chunks/preload-helper.a4192956.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js"], "stylesheets": [], "fonts": [] },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
