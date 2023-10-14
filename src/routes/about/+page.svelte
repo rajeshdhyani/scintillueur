@@ -1,6 +1,10 @@
 <svelte:head>
-    <title>Scintillueur | About</title> 
+    <title>Scintillueur | About</title>
 </svelte:head>
+
+
+
+
 
 <h1 class="page-title">About Scintillueuer</h1>
 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Delectus qui aliquid, recusandae accusantium non optio! Facilis suscipit iure dignissimos, fugit impedit rem itaque eius voluptatibus?</p>

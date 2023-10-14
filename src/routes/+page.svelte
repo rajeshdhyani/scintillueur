@@ -1,8 +1,46 @@
+<script>
+	import { onMount } from "svelte";
+    import { writable } from 'svelte/store';
+    let loading = writable(true);
+    let splineLoaded = false;
+	let splineLoadedDelay = false;
+    let mountWelcome = false;
+    onMount(async()=>{
+        mountWelcome = !mountWelcome;
+        await import ("https://unpkg.com/@splinetool/viewer@0.9.480/build/spline-viewer.js")
+    })
+    
+</script>
+
 <svelte:head>
-    <title>Scintillueur | Home</title> 
+    <title>Scintillueur | Home</title>
+     <!-- {#if $loading}
+		<style>
+			body {
+				overflow: hidden;
+				padding-right: 12px;
+			}
+			@media (min-width: 1440px) {
+				body {
+					padding-right: 22px;
+				}
+			}
+		</style>
+	{/if}
+	{#if !$loading}
+		<style>
+			body {
+                overflow: auto;
+				padding-right: 0px;
+			}
+		</style>
+	{/if} -->
 </svelte:head>
 
 <h1 class="page-title">Welcome!</h1>
+<div>
+    <spline-viewer hint loading-anim url="https://prod.spline.design/j9-OWKTFExWMnwkA/scene.splinecode"></spline-viewer>
+</div>
 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quas deserunt explicabo vitae mollitia, incidunt ullam aut perspiciatis! Accusamus magnam quo in, maiores architecto aliquam aperiam dolores molestiae quia, enim tenetur.</p>
 <p>Optio consequuntur ut suscipit necessitatibus corrupti qui modi quisquam aliquid odio cupiditate, dolorum quod ullam? Voluptatem, culpa eaque. Doloremque optio corrupti earum cum ea architecto consectetur adipisci a ipsam libero!</p>
 <p>Dolore expedita doloremque quae laboriosam eum dolorem repellat impedit autem sed. Optio enim ab nam, laborum nulla voluptates perferendis provident. Tenetur molestias laudantium quis dolor, provident distinctio doloremque iusto sit!</p>
