@@ -719,7 +719,7 @@ var init__ = __esm({
   ".svelte-kit/output/server/nodes/0.js"() {
     index = 0;
     component = async () => component_cache ?? (component_cache = (await Promise.resolve().then(() => (init_layout_svelte(), layout_svelte_exports))).default);
-    imports = ["_app/immutable/nodes/0.508bbdba.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js", "_app/immutable/chunks/each.e59479a4.js", "_app/immutable/chunks/stores.98628531.js", "_app/immutable/chunks/singletons.51610d62.js"];
+    imports = ["_app/immutable/nodes/0.c7727c89.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js", "_app/immutable/chunks/each.e59479a4.js", "_app/immutable/chunks/stores.75ed5cf6.js", "_app/immutable/chunks/singletons.fb9b3658.js"];
     stylesheets = ["_app/immutable/assets/0.2bb29258.css"];
     fonts = [];
   }
@@ -758,7 +758,7 @@ var init__2 = __esm({
   ".svelte-kit/output/server/nodes/1.js"() {
     index2 = 1;
     component2 = async () => component_cache2 ?? (component_cache2 = (await Promise.resolve().then(() => (init_error_svelte(), error_svelte_exports))).default);
-    imports2 = ["_app/immutable/nodes/1.83cc5f39.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js", "_app/immutable/chunks/stores.98628531.js", "_app/immutable/chunks/singletons.51610d62.js"];
+    imports2 = ["_app/immutable/nodes/1.6f1ea87d.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js", "_app/immutable/chunks/stores.75ed5cf6.js", "_app/immutable/chunks/singletons.fb9b3658.js"];
     stylesheets2 = [];
     fonts2 = [];
   }
@@ -774,7 +774,7 @@ var init_page_svelte = __esm({
   ".svelte-kit/output/server/entries/pages/_page.svelte.js"() {
     init_ssr();
     Page = create_ssr_component(($$result, $$props, $$bindings, slots) => {
-      return `${$$result.head += `<!-- HEAD_svelte-xj33sn_START -->${$$result.title = `<title>Scintillueur | Home</title>`, ""}<!-- HEAD_svelte-xj33sn_END -->`, ""} <h1 class="page-title" data-svelte-h="svelte-mayaj8">Welcome!</h1> <div data-svelte-h="svelte-1vke7xm"><spline-viewer hint loading-anim url="https://prod.spline.design/j9-OWKTFExWMnwkA/scene.splinecode"></spline-viewer></div> <p data-svelte-h="svelte-1xcwbrw">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quas deserunt explicabo vitae mollitia, incidunt ullam aut perspiciatis! Accusamus magnam quo in, maiores architecto aliquam aperiam dolores molestiae quia, enim tenetur.</p> <p data-svelte-h="svelte-1e523rx">Optio consequuntur ut suscipit necessitatibus corrupti qui modi quisquam aliquid odio cupiditate, dolorum quod ullam? Voluptatem, culpa eaque. Doloremque optio corrupti earum cum ea architecto consectetur adipisci a ipsam libero!</p> <p data-svelte-h="svelte-xborbg">Dolore expedita doloremque quae laboriosam eum dolorem repellat impedit autem sed. Optio enim ab nam, laborum nulla voluptates perferendis provident. Tenetur molestias laudantium quis dolor, provident distinctio doloremque iusto sit!</p> <p data-svelte-h="svelte-1ukqr91">Architecto molestiae rem veritatis laborum animi eaque vel magni quis odit voluptatem, corporis quo, alias minus at delectus incidunt officia dolorum harum cumque error soluta repudiandae? Quae, voluptas dolor! Magnam?</p>`;
+      return `${$$result.head += `<!-- HEAD_svelte-xj33sn_START -->${$$result.title = `<title>Scintillueur | Home</title>`, ""}<!-- HEAD_svelte-xj33sn_END -->`, ""} <h1 class="page-title" data-svelte-h="svelte-mayaj8">Welcome!</h1> <div data-svelte-h="svelte-1r5hg6a"><spline-viewer hint loading-anim url="https://prod.spline.design/fbSdCjgrbxb3AOyL/scene.splinecode"></spline-viewer></div> <p data-svelte-h="svelte-1xcwbrw">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quas deserunt explicabo vitae mollitia, incidunt ullam aut perspiciatis! Accusamus magnam quo in, maiores architecto aliquam aperiam dolores molestiae quia, enim tenetur.</p> <p data-svelte-h="svelte-1e523rx">Optio consequuntur ut suscipit necessitatibus corrupti qui modi quisquam aliquid odio cupiditate, dolorum quod ullam? Voluptatem, culpa eaque. Doloremque optio corrupti earum cum ea architecto consectetur adipisci a ipsam libero!</p> <p data-svelte-h="svelte-xborbg">Dolore expedita doloremque quae laboriosam eum dolorem repellat impedit autem sed. Optio enim ab nam, laborum nulla voluptates perferendis provident. Tenetur molestias laudantium quis dolor, provident distinctio doloremque iusto sit!</p> <p data-svelte-h="svelte-1ukqr91">Architecto molestiae rem veritatis laborum animi eaque vel magni quis odit voluptatem, corporis quo, alias minus at delectus incidunt officia dolorum harum cumque error soluta repudiandae? Quae, voluptas dolor! Magnam?</p>`;
     });
   }
 });
@@ -793,7 +793,7 @@ var init__3 = __esm({
   ".svelte-kit/output/server/nodes/2.js"() {
     index3 = 2;
     component3 = async () => component_cache3 ?? (component_cache3 = (await Promise.resolve().then(() => (init_page_svelte(), page_svelte_exports))).default);
-    imports3 = ["_app/immutable/nodes/2.5c4106f6.js", "_app/immutable/chunks/preload-helper.a4192956.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js"];
+    imports3 = ["_app/immutable/nodes/2.86f59f1c.js", "_app/immutable/chunks/preload-helper.a4192956.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js"];
     stylesheets3 = [];
     fonts3 = [];
   }
@@ -1145,7 +1145,7 @@ var options = {
 		<div class="error">
 			<span class="status">` + status + '</span>\n			<div class="message">\n				<h1>' + message + "</h1>\n			</div>\n		</div>\n	</body>\n</html>\n"
   },
-  version_hash: "13t2qje"
+  version_hash: "1jro1b3"
 };
 function get_hooks() {
   return {};
@@ -4563,7 +4563,7 @@ var manifest = (() => {
     assets: /* @__PURE__ */ new Set([".DS_Store", "favicon.png", "images/20230626_174239.jpg"]),
     mimeTypes: { ".png": "image/png", ".jpg": "image/jpeg" },
     _: {
-      client: { "start": "_app/immutable/entry/start.447cec14.js", "app": "_app/immutable/entry/app.6985a6e1.js", "imports": ["_app/immutable/entry/start.447cec14.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/singletons.51610d62.js", "_app/immutable/entry/app.6985a6e1.js", "_app/immutable/chunks/preload-helper.a4192956.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js"], "stylesheets": [], "fonts": [] },
+      client: { "start": "_app/immutable/entry/start.fbbac745.js", "app": "_app/immutable/entry/app.3ea6259c.js", "imports": ["_app/immutable/entry/start.fbbac745.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/singletons.fb9b3658.js", "_app/immutable/entry/app.3ea6259c.js", "_app/immutable/chunks/preload-helper.a4192956.js", "_app/immutable/chunks/scheduler.79b61495.js", "_app/immutable/chunks/index.f207c4d7.js"], "stylesheets": [], "fonts": [] },
       nodes: [
         __memo(() => Promise.resolve().then(() => (init__(), __exports))),
         __memo(() => Promise.resolve().then(() => (init__2(), __exports2))),
