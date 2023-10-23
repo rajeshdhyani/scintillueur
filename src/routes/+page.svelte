@@ -39,7 +39,7 @@
 
 <h1 class="page-title">Welcome!</h1>
 <div>
-    <spline-viewer hint loading-anim url="https://prod.spline.design/fbSdCjgrbxb3AOyL/scene.splinecode"></spline-viewer>
+    <spline-viewer hint loading-anim url="https://prod.spline.design/G0BXTvz1DLxjI6hZ/scene.splinecode"></spline-viewer>
 </div>
 <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quas deserunt explicabo vitae mollitia, incidunt ullam aut perspiciatis! Accusamus magnam quo in, maiores architecto aliquam aperiam dolores molestiae quia, enim tenetur.</p>
 <p>Optio consequuntur ut suscipit necessitatibus corrupti qui modi quisquam aliquid odio cupiditate, dolorum quod ullam? Voluptatem, culpa eaque. Doloremque optio corrupti earum cum ea architecto consectetur adipisci a ipsam libero!</p>
